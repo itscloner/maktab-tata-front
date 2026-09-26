@@ -1,5 +1,5 @@
 import { ICreateRequest } from "@/interface/request/ICreateRequest";
-import api from "@/services/axios";
+import api from "@/api/axios";
 
 export const createRequest = async (formData: ICreateRequest) => {
   try {

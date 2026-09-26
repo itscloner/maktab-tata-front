@@ -262,27 +262,27 @@ const getProvince = (id: number) => {
         filterable: false,
         align: "center",
         headerAlign: "center",
-        renderCell: (params) => (
-          <Tooltip title="مشاهده درخواست">
-            {" "}
-            <IconButton
-              size="small"
-              onClick={(event) => {
-                event.stopPropagation();
-                navigate(`/requests/${params.row.requestNumber}`);
-              }}
-              sx={{
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 1.5,
-                "&:hover": { backgroundColor: "action.hover" },
-              }}
-            >
-              {" "}
-              <VisibilityRoundedIcon fontSize="small" />{" "}
-            </IconButton>{" "}
-          </Tooltip>
-        ),
+        // renderCell: (params) => (
+        //   <Tooltip title="مشاهده درخواست">
+        //     {" "}
+        //     <IconButton
+        //       size="small"
+        //       onClick={(event) => {
+        //         event.stopPropagation();
+        //         navigate(`/requests/${params.row.requestNumber}`);
+        //       }}
+        //       sx={{
+        //         border: "1px solid",
+        //         borderColor: "divider",
+        //         borderRadius: 1.5,
+        //         "&:hover": { backgroundColor: "action.hover" },
+        //       }}
+        //     >
+        //       {" "}
+        //       <VisibilityRoundedIcon fontSize="small" />{" "}
+        //     </IconButton>{" "}
+        //   </Tooltip>
+        // ),
       },
     ];
   /* ------------------------------------------------------------------------ */ /* Loading */ /* ------------------------------------------------------------------------ */ if (

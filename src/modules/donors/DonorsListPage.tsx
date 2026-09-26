@@ -1,44 +1,49 @@
-import { useMemo, useState } from 'react';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import type { GridColDef } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
-import PageHeader from '@/components/common/PageHeader';
-import SearchInput from '@/components/common/SearchInput';
-import AppAvatar from '@/components/common/AppAvatar';
-import StatusChip from '@/components/common/StatusChip';
-import AppDataGrid from '@/components/tables/AppDataGrid';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog';
-import { TableSkeleton } from '@/components/common/LoadingState';
-import ErrorState from '@/components/common/ErrorState';
-import { useAsyncData } from '@/hooks/useAsyncData';
-import { createDonor, deleteDonor, getDonors, updateDonor } from '@/services/mock/donor.service';
-import { formatCurrency } from '@/utils/currency';
-import { formatPersianDate } from '@/utils/date';
-import { useToastStore } from '@/stores/toastStore';
-import { usePermission } from '@/permissions/permission.hooks';
-import DonorFormDialog from './DonorFormDialog';
-import type { DonorFormValues } from './donorSchema';
-import type { Donor } from '@/types';
+import { useMemo, useState } from "react";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import type { GridColDef } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
+import PageHeader from "@/components/common/PageHeader";
+import SearchInput from "@/components/common/SearchInput";
+import AppAvatar from "@/components/common/AppAvatar";
+import StatusChip from "@/components/common/StatusChip";
+import AppDataGrid from "@/components/tables/AppDataGrid";
+import ConfirmDialog from "@/components/dialogs/ConfirmDialog";
+import { TableSkeleton } from "@/components/common/LoadingState";
+import ErrorState from "@/components/common/ErrorState";
+import { useAsyncData } from "@/hooks/useAsyncData";
+import {
+  createDonor,
+  deleteDonor,
+  getDonors,
+  updateDonor,
+} from "@/api/mock/donor.service";
+import { formatCurrency } from "@/utils/currency";
+import { formatPersianDate } from "@/utils/date";
+import { useToastStore } from "@/stores/toastStore";
+import { usePermission } from "@/permissions/permission.hooks";
+import DonorFormDialog from "./DonorFormDialog";
+import type { DonorFormValues } from "./donorSchema";
+import type { Donor } from "@/types";
 
 export default function DonorsListPage() {
   const navigate = useNavigate();
   const { data: donors, loading, error, reload } = useAsyncData(getDonors);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<Donor | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Donor | null>(null);
   const [deleting, setDeleting] = useState(false);
   const showToast = useToastStore((s) => s.show);
-  const canCreate = usePermission('donors.create');
-  const canEdit = usePermission('donors.edit');
-  const canDelete = usePermission('donors.delete');
+  const canCreate = usePermission("donors.create");
+  const canEdit = usePermission("donors.edit");
+  const canDelete = usePermission("donors.delete");
 
   const filtered = useMemo(() => {
     if (!donors) return [];
@@ -54,61 +59,92 @@ export default function DonorsListPage() {
 
   const columns: GridColDef<Donor>[] = [
     {
-      field: 'firstName',
-      headerName: 'نام',
+      field: "firstName",
+      headerName: "نام",
       flex: 1.3,
       minWidth: 180,
       renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1.25} sx={{ height: '100%' }}>
-          <AppAvatar name={`${params.row.firstName} ${params.row.lastName}`} color={params.row.avatarColor} size={30} />
-          <span>{params.row.firstName} {params.row.lastName}</span>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1.25}
+          sx={{ height: "100%" }}
+        >
+          <AppAvatar
+            name={`${params.row.firstName} ${params.row.lastName}`}
+            color={params.row.avatarColor}
+            size={30}
+          />
+          <span>
+            {params.row.firstName} {params.row.lastName}
+          </span>
         </Stack>
       ),
     },
-    { field: 'nationalId', headerName: 'کد ملی', width: 120 },
-    { field: 'mobile', headerName: 'موبایل', width: 130 },
-    { field: 'donationsCount', headerName: 'تعداد کمک', width: 110, type: 'number' },
+    { field: "nationalId", headerName: "کد ملی", width: 120 },
+    { field: "mobile", headerName: "موبایل", width: 130 },
     {
-      field: 'totalDonationsAmount',
-      headerName: 'مجموع کمک',
+      field: "donationsCount",
+      headerName: "تعداد کمک",
+      width: 110,
+      type: "number",
+    },
+    {
+      field: "totalDonationsAmount",
+      headerName: "مجموع کمک",
       width: 160,
       valueFormatter: (value) => formatCurrency(value as number),
     },
     {
-      field: 'lastDonationDate',
-      headerName: 'آخرین کمک',
+      field: "lastDonationDate",
+      headerName: "آخرین کمک",
       width: 130,
-      valueFormatter: (value) => (value ? formatPersianDate(value as string) : '—'),
+      valueFormatter: (value) =>
+        value ? formatPersianDate(value as string) : "—",
     },
     {
-      field: 'status',
-      headerName: 'وضعیت',
+      field: "status",
+      headerName: "وضعیت",
       width: 110,
       renderCell: (params) => <StatusChip label={params.value as string} />,
     },
     {
-      field: 'actions',
-      headerName: 'عملیات',
+      field: "actions",
+      headerName: "عملیات",
       width: 130,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Stack direction="row" spacing={0.5} onClick={(e) => e.stopPropagation()}>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Tooltip title="مشاهده">
-            <IconButton size="small" onClick={() => navigate(`/donors/${params.row.id}`)}>
+            <IconButton
+              size="small"
+              onClick={() => navigate(`/donors/${params.row.id}`)}
+            >
               <VisibilityRoundedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
           {canEdit && (
             <Tooltip title="ویرایش">
-              <IconButton size="small" onClick={() => setEditTarget(params.row)}>
+              <IconButton
+                size="small"
+                onClick={() => setEditTarget(params.row)}
+              >
                 <EditRoundedIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           )}
           {canDelete && (
             <Tooltip title="حذف">
-              <IconButton size="small" color="error" onClick={() => setDeleteTarget(params.row)}>
+              <IconButton
+                size="small"
+                color="error"
+                onClick={() => setDeleteTarget(params.row)}
+              >
                 <DeleteRoundedIcon fontSize="small" />
               </IconButton>
             </Tooltip>
@@ -121,7 +157,7 @@ export default function DonorsListPage() {
   const handleCreate = async (values: DonorFormValues) => {
     await createDonor(values);
     setFormOpen(false);
-    showToast('خیر با موفقیت ثبت شد.');
+    showToast("خیر با موفقیت ثبت شد.");
     reload();
   };
 
@@ -129,7 +165,7 @@ export default function DonorsListPage() {
     if (!editTarget) return;
     await updateDonor(editTarget.id, values);
     setEditTarget(null);
-    showToast('اطلاعات خیر بروزرسانی شد.');
+    showToast("اطلاعات خیر بروزرسانی شد.");
     reload();
   };
 
@@ -139,7 +175,7 @@ export default function DonorsListPage() {
     await deleteDonor(deleteTarget.id);
     setDeleting(false);
     setDeleteTarget(null);
-    showToast('خیر با موفقیت حذف شد.', 'info');
+    showToast("خیر با موفقیت حذف شد.", "info");
     reload();
   };
 
@@ -153,14 +189,23 @@ export default function DonorsListPage() {
         description="مدیریت اطلاعات و تاریخچه کمک‌های خیرین"
         actions={
           canCreate ? (
-            <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={() => setFormOpen(true)}>
+            <Button
+              variant="contained"
+              startIcon={<AddRoundedIcon />}
+              onClick={() => setFormOpen(true)}
+            >
               افزودن خیر
             </Button>
           ) : undefined
         }
       />
       <Stack direction="row" justifyContent="flex-end">
-        <SearchInput value={search} onChange={setSearch} placeholder="جستجوی نام، کد ملی یا موبایل..." width={320} />
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="جستجوی نام، کد ملی یا موبایل..."
+          width={320}
+        />
       </Stack>
       <AppDataGrid
         rows={filtered}
@@ -170,7 +215,11 @@ export default function DonorsListPage() {
         emptyTitle="هنوز هیچ خیری ثبت نشده است."
         emptyDescription="با کلیک روی «افزودن خیر» اولین خیر را ثبت کنید."
       />
-      <DonorFormDialog open={formOpen} onClose={() => setFormOpen(false)} onSubmit={handleCreate} />
+      <DonorFormDialog
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        onSubmit={handleCreate}
+      />
       <DonorFormDialog
         open={!!editTarget}
         onClose={() => setEditTarget(null)}

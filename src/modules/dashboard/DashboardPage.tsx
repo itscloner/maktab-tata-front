@@ -1,28 +1,28 @@
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import PaidRoundedIcon from '@mui/icons-material/PaidRounded';
-import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
-import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
-import VolunteerActivismRoundedIcon from '@mui/icons-material/VolunteerActivismRounded';
-import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
-import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { useNavigate } from 'react-router-dom';
-import PageHeader from '@/components/common/PageHeader';
-import StatCard from '@/components/common/StatCard';
-import PageLoader from '@/components/common/LoadingState';
-import ErrorState from '@/components/common/ErrorState';
-import { useAsyncData } from '@/hooks/useAsyncData';
-import { getDashboardData } from '@/services/mock/dashboard.service';
-import { formatCompactCurrency, formatNumber } from '@/utils/currency';
-import DonationsAreaChart from './DonationsAreaChart';
-import ExpensesBarChart from './ExpensesBarChart';
-import DonationTypesDonut from './DonationTypesDonut';
-import ProjectsProgressList from './ProjectsProgressList';
-import RecentTransactionsTable from './RecentTransactionsTable';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
+import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
+import AccountBalanceWalletRoundedIcon from "@mui/icons-material/AccountBalanceWalletRounded";
+import VolunteerActivismRoundedIcon from "@mui/icons-material/VolunteerActivismRounded";
+import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
+import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { useNavigate } from "react-router-dom";
+import PageHeader from "@/components/common/PageHeader";
+import StatCard from "@/components/common/StatCard";
+import PageLoader from "@/components/common/LoadingState";
+import ErrorState from "@/components/common/ErrorState";
+import { useAsyncData } from "@/hooks/useAsyncData";
+import { getDashboardData } from "@/api/mock/dashboard.service";
+import { formatCompactCurrency, formatNumber } from "@/utils/currency";
+import DonationsAreaChart from "./DonationsAreaChart";
+import ExpensesBarChart from "./ExpensesBarChart";
+import DonationTypesDonut from "./DonationTypesDonut";
+import ProjectsProgressList from "./ProjectsProgressList";
+import RecentTransactionsTable from "./RecentTransactionsTable";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -39,7 +39,11 @@ export default function DashboardPage() {
         title="داشبورد"
         description="نمای کلی وضعیت مالی و عملکرد خیریه مکتب طه"
         actions={
-          <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={() => navigate('/donations/create')}>
+          <Button
+            variant="contained"
+            startIcon={<AddRoundedIcon />}
+            onClick={() => navigate("/donations/create")}
+          >
             ثبت کمک جدید
           </Button>
         }
@@ -47,7 +51,11 @@ export default function DashboardPage() {
 
       <Grid container spacing={2.5}>
         <Grid item xs={12} sm={6} lg={4}>
-          <StatCard label="مجموع کمک‌های دریافتی" value={formatCompactCurrency(stats.totalDonations)} icon={<PaidRoundedIcon />} />
+          <StatCard
+            label="مجموع کمک‌های دریافتی"
+            value={formatCompactCurrency(stats.totalDonations)}
+            icon={<PaidRoundedIcon />}
+          />
         </Grid>
         <Grid item xs={12} sm={6} lg={4}>
           <StatCard
@@ -66,7 +74,11 @@ export default function DashboardPage() {
           />
         </Grid>
         <Grid item xs={12} sm={6} lg={4}>
-          <StatCard label="تعداد خیرین" value={formatNumber(stats.donorsCount)} icon={<VolunteerActivismRoundedIcon />} />
+          <StatCard
+            label="تعداد خیرین"
+            value={formatNumber(stats.donorsCount)}
+            icon={<VolunteerActivismRoundedIcon />}
+          />
         </Grid>
         <Grid item xs={12} sm={6} lg={4}>
           <StatCard
@@ -88,7 +100,7 @@ export default function DashboardPage() {
 
       <Grid container spacing={2.5}>
         <Grid item xs={12} lg={7}>
-          <Paper variant="outlined" sx={{ p: 2.5, height: '100%' }}>
+          <Paper variant="outlined" sx={{ p: 2.5, height: "100%" }}>
             <Typography variant="h5" sx={{ mb: 1 }}>
               روند کمک‌های دریافتی
             </Typography>
@@ -96,7 +108,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={5}>
-          <Paper variant="outlined" sx={{ p: 2.5, height: '100%' }}>
+          <Paper variant="outlined" sx={{ p: 2.5, height: "100%" }}>
             <Typography variant="h5" sx={{ mb: 1 }}>
               انواع کمک‌ها
             </Typography>
@@ -105,7 +117,7 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} lg={7}>
-          <Paper variant="outlined" sx={{ p: 2.5, height: '100%' }}>
+          <Paper variant="outlined" sx={{ p: 2.5, height: "100%" }}>
             <Typography variant="h5" sx={{ mb: 1 }}>
               روند هزینه‌ها
             </Typography>
@@ -113,7 +125,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={5}>
-          <Paper variant="outlined" sx={{ p: 2.5, height: '100%' }}>
+          <Paper variant="outlined" sx={{ p: 2.5, height: "100%" }}>
             <Typography variant="h5" sx={{ mb: 2 }}>
               پیشرفت پروژه‌ها
             </Typography>
@@ -123,9 +135,14 @@ export default function DashboardPage() {
 
         <Grid item xs={12}>
           <Paper variant="outlined">
-            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 2.5, pb: 1.5 }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ p: 2.5, pb: 1.5 }}
+            >
               <Typography variant="h5">آخرین تراکنش‌ها</Typography>
-              <Button size="small" onClick={() => navigate('/donations')}>
+              <Button size="small" onClick={() => navigate("/donations")}>
                 مشاهده همه
               </Button>
             </Stack>

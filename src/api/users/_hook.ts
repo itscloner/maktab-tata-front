@@ -1,12 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { usersRequest } from './_request';
-import type { CreateUserRequest, UpdateUserRequest } from '../../Types/user.types';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { usersRequest } from "./_request";
+import type {
+  CreateUserRequest,
+  UpdateUserRequest,
+} from "../../types/user.types";
 
 // کلید مشترک Cache برای این ماژول — همه‌جا از همین آرایه استفاده کنید
 // تا Invalidate کردن بعد از Create/Update/Delete همیشه درست کار کند.
 export const usersQueryKeys = {
-  all: ['users'] as const,
-  detail: (id: number) => ['users', id] as const,
+  all: ["users"] as const,
+  detail: (id: number) => ["users", id] as const,
 };
 
 // ── Queries ──────────────────────────────────────────────────────
@@ -32,7 +35,8 @@ export function useUserByIdQuery(id: number | undefined) {
 export function useCreateUserMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateUserRequest) => usersRequest.create(data).then((res) => res.data),
+    mutationFn: (data: CreateUserRequest) =>
+      usersRequest.create(data).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.all });
     },
@@ -46,7 +50,9 @@ export function useUpdateUserMutation() {
       usersRequest.update(id, data).then((res) => res.data),
     onSuccess: (_result, variables) => {
       queryClient.invalidateQueries({ queryKey: usersQueryKeys.all });
-      queryClient.invalidateQueries({ queryKey: usersQueryKeys.detail(variables.id) });
+      queryClient.invalidateQueries({
+        queryKey: usersQueryKeys.detail(variables.id),
+      });
     },
   });
 }

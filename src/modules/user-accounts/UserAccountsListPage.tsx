@@ -1,26 +1,26 @@
-import { useMemo, useState } from 'react';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import type { GridColDef } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
-import PageHeader from '@/components/common/PageHeader';
-import SearchInput from '@/components/common/SearchInput';
-import AppAvatar from '@/components/common/AppAvatar';
-import AppDataGrid from '@/components/tables/AppDataGrid';
-import ConfirmDialog from '@/components/dialogs/ConfirmDialog';
-import { TableSkeleton } from '@/components/common/LoadingState';
-import ErrorState from '@/components/common/ErrorState';
-import { formatPersianDate } from '@/utils/date';
-import { useToastStore } from '@/stores/toastStore';
-import { useUsersListQuery, useDeleteUserMutation } from '@/Services/users/_hook';
-import UserAccountFormDialog from './UserAccountFormDialog';
-import type { User } from '@/Types/user.types';
+import { useMemo, useState } from "react";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import type { GridColDef } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
+import PageHeader from "@/components/common/PageHeader";
+import SearchInput from "@/components/common/SearchInput";
+import AppAvatar from "@/components/common/AppAvatar";
+import AppDataGrid from "@/components/tables/AppDataGrid";
+import ConfirmDialog from "@/components/dialogs/ConfirmDialog";
+import { TableSkeleton } from "@/components/common/LoadingState";
+import ErrorState from "@/components/common/ErrorState";
+import { formatPersianDate } from "@/utils/date";
+import { useToastStore } from "@/stores/toastStore";
+import { useUsersListQuery, useDeleteUserMutation } from "@/api/users/_hook";
+import UserAccountFormDialog from "./UserAccountFormDialog";
+import type { User } from "@/types/user.types";
 
 export default function UserAccountsListPage() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function UserAccountsListPage() {
   const deleteMutation = useDeleteUserMutation();
   const showToast = useToastStore((s) => s.show);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<User | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
@@ -48,36 +48,54 @@ export default function UserAccountsListPage() {
 
   const columns: GridColDef<User>[] = [
     {
-      field: 'firstName',
-      headerName: 'نام و نام خانوادگی',
+      field: "firstName",
+      headerName: "نام و نام خانوادگی",
       flex: 1.1,
       minWidth: 180,
       renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1.25} sx={{ height: '100%' }}>
-          <AppAvatar name={`${params.row.firstName} ${params.row.lastName}`} size={30} />
-          <span>{params.row.firstName} {params.row.lastName}</span>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1.25}
+          sx={{ height: "100%" }}
+        >
+          <AppAvatar
+            name={`${params.row.firstName} ${params.row.lastName}`}
+            size={30}
+          />
+          <span>
+            {params.row.firstName} {params.row.lastName}
+          </span>
         </Stack>
       ),
     },
-    { field: 'mobile', headerName: 'موبایل', width: 130 },
-    { field: 'email', headerName: 'ایمیل', flex: 1, minWidth: 170 },
-    { field: 'userName', headerName: 'نام کاربری', width: 140 },
+    { field: "mobile", headerName: "موبایل", width: 130 },
+    { field: "email", headerName: "ایمیل", flex: 1, minWidth: 170 },
+    { field: "userName", headerName: "نام کاربری", width: 140 },
     {
-      field: 'lastEntry',
-      headerName: 'آخرین ورود',
+      field: "lastEntry",
+      headerName: "آخرین ورود",
       width: 140,
-      valueFormatter: (value) => (value ? formatPersianDate(value as string) : '—'),
+      valueFormatter: (value) =>
+        value ? formatPersianDate(value as string) : "—",
     },
     {
-      field: 'actions',
-      headerName: 'عملیات',
+      field: "actions",
+      headerName: "عملیات",
       width: 130,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Stack direction="row" spacing={0.5} onClick={(e) => e.stopPropagation()}>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Tooltip title="مشاهده">
-            <IconButton size="small" onClick={() => navigate(`/user-accounts/${params.row.id}`)}>
+            <IconButton
+              size="small"
+              onClick={() => navigate(`/user-accounts/${params.row.id}`)}
+            >
               <VisibilityRoundedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -87,7 +105,11 @@ export default function UserAccountsListPage() {
             </IconButton>
           </Tooltip>
           <Tooltip title="حذف">
-            <IconButton size="small" color="error" onClick={() => setDeleteTarget(params.row)}>
+            <IconButton
+              size="small"
+              color="error"
+              onClick={() => setDeleteTarget(params.row)}
+            >
               <DeleteRoundedIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -100,10 +122,10 @@ export default function UserAccountsListPage() {
     if (!deleteTarget) return;
     try {
       await deleteMutation.mutateAsync(deleteTarget.id);
-      showToast('کاربر حذف شد.', 'info');
+      showToast("کاربر حذف شد.", "info");
       setDeleteTarget(null);
     } catch {
-      showToast('حذف کاربر با خطا مواجه شد.', 'error');
+      showToast("حذف کاربر با خطا مواجه شد.", "error");
     }
   };
 
@@ -116,13 +138,22 @@ export default function UserAccountsListPage() {
         title="کاربران"
         description="مدیریت اطلاعات پایه کاربران سامانه (متصل به API واقعی)"
         actions={
-          <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={() => setFormOpen(true)}>
+          <Button
+            variant="contained"
+            startIcon={<AddRoundedIcon />}
+            onClick={() => setFormOpen(true)}
+          >
             افزودن کاربر
           </Button>
         }
       />
       <Stack direction="row" justifyContent="flex-end">
-        <SearchInput value={search} onChange={setSearch} placeholder="جستجوی نام، موبایل، ایمیل یا نام کاربری..." width={320} />
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="جستجوی نام، موبایل، ایمیل یا نام کاربری..."
+          width={320}
+        />
       </Stack>
       <AppDataGrid
         rows={filtered}
@@ -132,7 +163,10 @@ export default function UserAccountsListPage() {
         emptyTitle="هنوز هیچ کاربری ثبت نشده است."
         emptyDescription="با کلیک روی «افزودن کاربر» اولین کاربر را ثبت کنید."
       />
-      <UserAccountFormDialog open={formOpen} onClose={() => setFormOpen(false)} />
+      <UserAccountFormDialog
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+      />
       <UserAccountFormDialog
         open={!!editTarget}
         onClose={() => setEditTarget(null)}
