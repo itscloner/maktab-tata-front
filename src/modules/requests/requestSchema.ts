@@ -3,40 +3,41 @@ import { z } from "zod";
 export const requestSchema = z.object({
   requestDate: z.string().min(1, "تاریخ درخواست الزامی است"),
 
-  // اطلاعات مددجو
-  nationalId: z.string().length(10, "کد ملی باید ۱۰ رقم باشد"),
-  firstName: z.string().min(2, "نام باید حداقل ۲ حرف باشد"),
-  lastName: z.string().min(2, "نام خانوادگی باید حداقل ۲ حرف باشد"),
-  gender: z.enum(["مرد", "زن"]),
-  custodyType: z.enum([
-    "دارای سرپرست",
-    "بدون سرپرست",
-    "زن سرپرست خانوار",
-    "سالمند بی‌سرپرست",
-  ]),
-  nationality: z.enum(["ایرانی", "افغان", "عراقی", "سایر"]),
-  religion: z.enum(["اسلام", "مسیحیت", "کلیمی", "زرتشتی", "سایر"]),
+  requestDescription: z
+    .string()
+    .trim()
+    .min(5, "شرح درخواست باید حداقل ۵ کاراکتر باشد"),
 
-  // اطلاعات تماس
-  province: z.string().min(1, "استان الزامی است"),
-  city: z.string().min(1, "شهر الزامی است"),
-  district: z.string().min(1, "محدوده الزامی است"),
-  address: z.string().min(5, "آدرس الزامی است"),
-  mobile: z.string().regex(/^09\d{9}$/, "شماره موبایل معتبر نیست"),
-  phone: z.string().optional(),
+  requestTypeId: z.number().int().positive("نوع درخواست الزامی است"),
 
-  // اطلاعات درخواست
-  aidType: z.enum([
-    "نقدی",
-    "درمانی",
-    "تحصیلی",
-    "جهیزیه",
-    "مسکن",
-    "اطعام",
-    "سایر",
-  ]),
-  requestDescription: z.string().min(5, "شرح درخواست الزامی است"),
-  referrer: z.string().min(2, "معرف الزامی است"),
+  clientFirstName: z.string().trim().min(2, "نام باید حداقل ۲ حرف باشد"),
+
+  clientLastName: z
+    .string()
+    .trim()
+    .min(2, "نام خانوادگی باید حداقل ۲ حرف باشد"),
+
+  houseHeadStatusId: z.number().int().positive("نوع سرپرستی الزامی است"),
+
+  gender: z.string().min(1, "جنسیت الزامی است"),
+
+  refererId: z.number().int().positive("معرف الزامی است"),
+
+  nationaltyId: z.number().int().positive("ملیت الزامی است"),
+
+  provinceId: z.number().int().positive("استان الزامی است"),
+
+  cityId: z.number().int().positive("شهر الزامی است"),
+
+  address: z.string().trim().min(5, "آدرس الزامی است"),
+
+  mobileNumber: z.string().regex(/^09\d{9}$/, "شماره موبایل معتبر نیست"),
+
+  homeNumber: z.string().trim().optional(),
+
+  areaId: z.number().int().positive("منطقه الزامی است"),
+
+  religonId: z.number().int().positive("دین الزامی است"),
 });
 
 export type RequestFormValues = z.infer<typeof requestSchema>;

@@ -381,7 +381,7 @@ const getProvince = (id: number) => {
         columns={columns}
         /* * چون id نداریم و requestNumber unique است، * DataGrid از requestNumber به عنوان key استفاده می‌کند. */ getRowId={(
           row,
-        ) => row.requestNumber}
+        ) => row.id}
         /* * کلیک روی هر ردیف */ onRowClick={(params) =>
           navigate(`/requests/${params.row.requestNumber}`)
         }

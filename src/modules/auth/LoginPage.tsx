@@ -48,6 +48,9 @@ export default function LoginPage() {
 
   const onSubmit = async (values: FormValues) => {
     setLoginError("");
+    login(values.userName, values.password);
+    navigate("/dashboard", { replace: true });
+
     loginTools.mutate(values, {
       onSuccess: (response) => {
         if (response.isSucceddded) {
